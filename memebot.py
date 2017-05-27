@@ -1,16 +1,9 @@
 import json
-import urllib2
-import logging
-import os
-
 from urlparse import parse_qs
 
 import boto3
 
 token_parameter = 'memebot_slash_command_token'
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 
 def respond(err, res=None):
