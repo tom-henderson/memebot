@@ -1,0 +1,6 @@
+.DS_Store
+terraform.tfstate*
+.terraform*
+*.zip
+debug.txt
+terraform.tf
