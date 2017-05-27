@@ -4,7 +4,8 @@ from urlparse import parse_qs
 import boto3
 
 token_parameter = 'memebot_slash_command_token'
-
+sns_topic = 'memebot_sns_topic'
+sns = boto3.client('sns')
 
 def respond(err, res=None):
     return {
@@ -17,8 +18,8 @@ def respond(err, res=None):
 
 
 try:
-    client = boto3.client('ssm')
-    response = client.get_parameters(
+    ssm = boto3.client('ssm')
+    response = ssm.get_parameters(
         Names=[token_parameter],
         WithDecryption=True
     )
