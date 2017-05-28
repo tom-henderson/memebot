@@ -3,6 +3,13 @@ import urllib2
 from pprint import pprint
 
 
+def respond(url, response_object):
+    req = urllib2.Request(url)
+    req.add_header('Content-Type', 'application/json')
+    response = urllib2.urlopen(req, json.dumps(response_object))
+    return response
+
+
 def get_param(params, key, default=None):
     try:
         return params[key][0]
@@ -11,8 +18,6 @@ def get_param(params, key, default=None):
 
 
 def lambda_handler(event, context):
-    print event
-
     message = json.loads(event['Records'][0]['Sns']['Message'])
 
     user_name = get_param(message, 'user_name')
@@ -25,6 +30,4 @@ def lambda_handler(event, context):
         "text": ":white_check_mark: Worker ran successfully.",
     }
 
-    req = urllib2.Request(response_url)
-    req.add_header('Content-Type', 'application/json')
-    response = urllib2.urlopen(req, json.dumps(response_object))
+    response = respond(response_url, response_object)
