@@ -1,11 +1,13 @@
+import os
 import json
 from urlparse import parse_qs
 
 import boto3
 
-token_parameter = 'memebot_slash_command_token'
-sns_topic = 'memebot_sns_topic'
+token_parameter = os.environ['token_parameter']
+sns_arn = os.environ['sns_arn']
 sns = boto3.client('sns')
+
 
 def respond(err, res=None):
     return {
@@ -38,18 +40,19 @@ def get_param(params, key, default=None):
 def lambda_handler(event, context):
     params = parse_qs(event['body'])
 
-    token = params['token'][0]
+    token = get_param(params, 'token')
     if token != expected_token:
         logger.error("Request token (%s) does not match expected", token)
         return respond(Exception('Invalid request token'))
 
-    user = get_param(params, 'user_name')
-    command = get_param(params, 'command')
-    channel = get_param(params, 'channel_name')
-    command_text = get_param(params, 'text')
+    response = sns.publish(
+        TargetArn=sns_arn,
+        Message=json.dumps({'default': json.dumps(params)}),
+        MessageStructure='json'
+    )
 
     response_object = {
-        "text": "Preparing your meme...",
+        "text": ":hourglass: Preparing your meme.",
     }
 
     return respond(

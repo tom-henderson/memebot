@@ -1,7 +1,8 @@
 ## Setting up a new slash command
 
 1. Check `main.tf` and edit the region if required.
-2. Zip the source file `zip memebot.zip memebot.py`
+2. Zip the bot source `zip memebot.zip memebot.py`
+3. Zip the bot worker source `zip memebot_worker.zip memebot_worker.py`
 3. Run `terraform apply`.
 4. Navigate to `https://<your-team-domain>.slack.com/services/new`
 5. Search for and select "Slash Commands".
