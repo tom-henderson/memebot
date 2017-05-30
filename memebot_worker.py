@@ -1,6 +1,9 @@
 import json
 import urllib2
+from urllib import urlencode
 from pprint import pprint
+
+api_url = "https://api.imgflip.com/caption_image"
 
 
 def respond(url, response_object):
@@ -26,8 +29,21 @@ def lambda_handler(event, context):
     command_text = get_param(message, 'text')
     response_url = get_param(message, 'response_url')
 
+    meme_request = urlencode({
+        'username': "imgflip_hubot",
+        'password': "imgflip_hubot",
+        'template_id': "101470",
+        'text1': 'Robots',
+    })
+
+    request = urllib2.Request(api_url)
+    request.add_header('User-Agent', "Mozilla/5.0")
+    response = urllib2.urlopen(request, meme_request)
+    meme = json.loads(response.read())['data']['url']
+
     response_object = {
-        "text": ":white_check_mark: Worker ran successfully.",
+        "response_type": "in_channel",
+        "text": meme,
     }
 
     response = respond(response_url, response_object)
