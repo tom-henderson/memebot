@@ -33,7 +33,7 @@ def lambda_handler(event, context):
         'username': "imgflip_hubot",
         'password': "imgflip_hubot",
         'template_id': "101470",
-        'text1': 'Robots',
+        'text1': command_text,
     })
 
     request = urllib2.Request(api_url)
