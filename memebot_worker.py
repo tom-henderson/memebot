@@ -120,6 +120,14 @@ def lambda_handler(event, context):
     command_text = get_param(message, 'text')
     response_url = get_param(message, 'response_url')
 
+    if command_text == "help":
+        expressions = "\n".join([meme['regex'] for meme in memes])
+        response_object = {
+            "response_type": "ephemeral",
+            "text": "```{}```".format(expressions)
+        }
+        respond(response_url, response_object)
+
     meme = find_meme(command_text)
 
     if meme:
@@ -148,4 +156,4 @@ def lambda_handler(event, context):
             )
         }
 
-    response = respond(response_url, response_object)
+    respond(response_url, response_object)
