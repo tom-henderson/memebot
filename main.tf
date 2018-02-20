@@ -17,7 +17,7 @@ module "memebot" {
   source_code = "memebot.zip"
   module_name = "memebot"
 
-  ssm_parameters = ["catbot_slash_command_token"]
+  ssm_parameters = ["memebot_slash_command_token"]
 
   environment_variables = {
     token_parameter = "memebot_slash_command_token"
