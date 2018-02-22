@@ -32,9 +32,9 @@ data "aws_iam_policy_document" "allow_sns_publish" {
   }
 }
 
-resource "aws_iam_role_policy" "lambda" {
-  name   = "${var.name}_policy"
-  policy = "${data.aws_iam_policy_document.lambda.json}"
+resource "aws_iam_role_policy" "allow_sns_publish" {
+  name   = "allow_sns_publish_policy"
+  policy = "${data.aws_iam_policy_document.allow_sns_publish.json}"
   role   = "${module.memebot.iam_role_name}"
 }
 
@@ -53,13 +53,13 @@ module "memebot_worker" {
 resource "aws_sns_topic_subscription" "user_updates_sqs_target" {
   topic_arn = "${aws_sns_topic.topic.arn}"
   protocol  = "lambda"
-  endpoint  = "${module.memebot_worker.lambda_arn}"
+  endpoint  = "${module.memebot_worker.arn}"
 }
 
-resource "aws_lambda_permission" "with_sns" {
+resource "aws_lambda_permission" "allow_execution_from_sns" {
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
-  function_name = "${module.memebot_worker.lambda_function_name}"
+  function_name = "${module.memebot_worker.function_name}"
   principal     = "sns.amazonaws.com"
   source_arn    = "${aws_sns_topic.topic.arn}"
 }
